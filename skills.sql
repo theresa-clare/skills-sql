@@ -71,6 +71,11 @@ WHERE m.year = 1960;
     --     ON b.name = m.brand_name
     -- WHERE b.discontinued IS NULL;
 
+-- after:
+    -- SELECT name 
+    -- FROM Brands
+    -- WHERE discontinued;
+
 -- 2. Modify this left join so it only selects models that have brands in the Brands table.
 -- before: 
     -- SELECT m.name,
@@ -80,8 +85,21 @@ WHERE m.year = 1960;
     --   LEFT JOIN Brands AS b
     --     ON b.name = m.brand_name;
 
+-- after: 
+    -- SELECT m.name,
+    --        m.brand_name,
+    --        b.founded
+    -- FROM Models AS m
+    --   JOIN Brands AS b
+    --     ON b.name = m.brand_name;
+
 -- followup question: In your own words, describe the difference between 
 -- left joins and inner joins.
+
+-- Response:
+-- Inner joins give a result only if it falls into both t1 and t2. 
+-- Left joins include results from the entire left table in addition to
+-- the common elements of t1 and t2.
 
 -- 3. Modify the query so that it only selects brands that don't have any car models in the cars table. 
 -- (Hint: it should only show Tesla's row.)
@@ -93,6 +111,13 @@ WHERE m.year = 1960;
     --     ON brands.name = Models.brand_name
     -- WHERE Models.year > 1940;
 
+-- after:
+    -- SELECT Brands.name
+    -- FROM Brands
+    --   LEFT JOIN Models
+    --     ON Brands.name = Models.brand_name
+    -- WHERE Models.brand_name IS NULL;
+
 -- 4. Modify the query to add another column to the results to show 
 -- the number of years from the year of the model *until* the brand becomes discontinued
 -- Display this column with the name years_until_brand_discontinued.
@@ -103,6 +128,17 @@ WHERE m.year = 1960;
     --        b.discontinued
     -- FROM Models AS m
     --   LEFT JOIN brands AS b
+    --     ON m.brand_name = b.name
+    -- WHERE b.discontinued NOT NULL;
+
+-- after:
+    -- select b.name,
+    --        m.name,
+    --        m.year,
+    --        b.discontinued,
+    --        b.discontinued - m.year AS years_unil_brand_discontinued
+    -- FROM Models AS m
+    --   LEFT JOIN Brands as b
     --     ON m.brand_name = b.name
     -- WHERE b.discontinued NOT NULL;
 
